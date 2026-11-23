@@ -19,10 +19,11 @@
   },
   "asr_prompt": "Keo silicone PELI P300 gốc acid, PELI P500 trung tính, nhôm, kính, bê tông, gỗ, đá, PVC, thi công, đóng rắn.",
   "music": {
-    "name": "Daylight Robbery",
+    "name": "Happy Home",
     "source": "Mixkit (Stock Music Free License — dùng được cho quảng cáo online & mạng xã hội, không cần ghi nguồn)",
-    "url": "https://assets.mixkit.co/music/1136/1136.mp3",
-    "start": 6.04,
-    "mix": "nhạc -24 LUFS, tự giảm khi có giọng (sidechain), fade out 1.8s cuối; tổng -13 LUFS"
+    "url": "https://assets.mixkit.co/music/801/801.mp3",
+    "start": 1.74,
+    "mix": "nhạc -23 LUFS, sidechain theo voice, fade out 1.8s cuối; tổng -13 LUFS",
+    "da_thu": "Daylight Robbery (1136) — chủ kênh thấy rùng rợn, không vui"
   }
 }

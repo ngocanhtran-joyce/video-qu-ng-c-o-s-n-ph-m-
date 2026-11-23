@@ -36,6 +36,7 @@ Toàn khung chỉ chỉnh nhẹ: brightness +0.015, saturation 1.06, contrast 1.
 Voice: highpass 80Hz → khử ồn → compressor → loudnorm −15 LUFS.
 **Nhạc nền**: chủ kênh để Claude tự chọn theo xu hướng. Chỉ dùng nhạc miễn phí bản quyền được phép dùng quảng cáo
 (Mixkit Stock Music Free License); không dùng nhạc trend có bản quyền (dễ bị tắt tiếng / gỡ video quảng cáo).
-Ưu tiên hip-hop/trap/EDM beat mạnh 110–130 BPM, không lời. Bỏ intro nhẹ để beat chính vào từ 0s.
+Chủ kênh muốn nhạc **vui, sôi động, tươi sáng** — KHÔNG dùng beat trap/hip-hop tối, giọng thứ (Daylight Robbery bị chê "rùng rợn").
+Ưu tiên pop / funk / dance-pop **giọng trưởng** (kiểm tra bằng chroma key), 110–145 BPM, không lời. Bỏ intro nhẹ để beat chính vào từ 0s.
 Nhạc −24 LUFS, sidechain theo voice (threshold 0.03, ratio 5), fade out cuối; tổng −13/−14 LUFS.
 Kiểm tra lại bằng Whisper trên bản mix: lời nói phải nhận ra được đầy đủ.
