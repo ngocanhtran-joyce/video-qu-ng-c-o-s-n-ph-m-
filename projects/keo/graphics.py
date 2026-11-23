@@ -8,11 +8,26 @@ from lib import load_captions, _ff
 W = sys.argv[1]
 ASSETS = os.path.abspath(os.path.join(W, "assets"))
 TOTAL = 99.4
-HOOK_END = 2.4
+HOOK_END = 3.0
 caps = load_captions(os.path.join(HERE, "transcript.json"), os.path.join(HERE, "lines.txt"),
                      hide_before=HOOK_END, total=TOTAL)
 
 ORANGE, GOLD = "#ff6a00", "#ffc21a"
+
+# Ranh giới cảnh (từ edl.txt) + vùng mặt người gộp theo cảnh (từ faces.json) để đồ hoạ né mặt
+CUTS = [0.0]
+for l in open(os.path.join(HERE, "edl.txt")):
+    if l.strip() and not l.startswith("#"):
+        CUTS.append(round(CUTS[-1] + float(l.split()[3]), 3))
+FJ = json.load(open(os.path.join(W, "faces.json")))
+# Cảnh có người thật (đã xem bằng mắt); cảnh khác bỏ qua khung nhận nhầm (hoa, logo, bóng phản chiếu trên kính)
+PEOPLE = {1, 10, 14, 15, 16, 17, 19, 27, 32, 33}
+SHOT_FACES = []
+for k, (a, b) in enumerate(zip(CUTS, CUTS[1:]), 1):
+    if k not in PEOPLE:
+        SHOT_FACES.append([]); continue
+    fr = range(int(a * FJ["fps"]), min(len(FJ["boxes"]), int(b * FJ["fps"]) + 1))
+    SHOT_FACES.append([bx for i in fr for bx in FJ["boxes"][i]])
 
 
 def el(t0, t1, x, y, html, anim="slam", w=None, cls=""):
@@ -43,17 +58,17 @@ E = []
 # ---------- HOOK: hiện đủ ngay từ 0s ----------
 E.append(el(-1, HOOK_END, 0, 150, '<div class="hook">'
             '<div class="haz" style="height:26px"></div>'
-            '<div class="hk1">KEO SILICONE PELI</div>'
+            '<div class="hk1">THỢ NÀO CŨNG PHẢI BIẾT!</div>'
             '<div class="hk2"><span class="g">P300</span> <span class="vs">HAY</span> <span class="g">P500</span>?</div>'
-            '<div class="hk3">CHỌN ĐÚNG KEO · LÀM MỘT LẦN LÀ CHẮC</div>'
+            '<div class="hk3">CHỌN SAI KEO = LÀM LẠI TỪ ĐẦU</div>'
             '<div class="haz" style="height:26px"></div></div>', anim="none", w=1080))
 
 # ---------- 01 · P300 ----------
-E.append(el(2.5, 26.3, 40, 110, section("01", "PELI P300", "KEO GỐC ACID"), anim="slideL"))
+E.append(el(3.0, 26.3, 40, 110, section("01", "PELI P300", "KEO GỐC ACID"), anim="slideL"))
 E.append(el(3.4, 8.3, 40, 330,
             row(3.5, "✔", "KHÔ RẤT NHANH") + row(4.5, "✔", "BÁM CỰC CHẮC TRÊN KÍNH") + row(6.6, "✔", "GIÁ THÀNH HỢP LÝ"),
             anim="slideL", cls="list"))
-E.append(el(8.6, 18.4, 600, 760, '<div class="pcard blue">' + img("p300", 470) + '<div class="ptag">PELI P300</div></div>', anim="slideR"))
+E.append(el(8.6, 18.4, 600, 760, '<div class="pcard blue">' + img("p300", 400) + '<div class="ptag">PELI P300</div></div>', anim="slideR"))
 E.append(el(9.8, 18.4, 40, 330, '<div class="plate dark sm">DÙNG ĐỂ</div>'
             + row(11.0, "▸", "TRÁM KÍNH TRONG NHÀ") + row(13.5, "▸", "KHE KÍNH · CỬA KÍNH") + row(15.8, "▸", "SỬA CHỮA NHỎ · NHANH GỌN"),
             anim="slideL", cls="list"))
@@ -69,10 +84,10 @@ E.append(el(28.9, 36.0, 40, 330,
             anim="slideL", cls="list"))
 E.append(el(32.9, 36.0, 40, 1130, '<div class="chips">' + chip(33.1, "NHÔM") + chip(33.6, "KÍNH") + chip(34.0, "BÊ TÔNG")
             + chip(34.6, "GỖ") + chip(34.9, "ĐÁ") + chip(35.3, "PVC") + '</div>', anim="none", w=1000))
-E.append(el(36.2, 46.6, 590, 790, '<div class="pcard green">' + img("p500", 420) + '<div class="ptag">PELI P500</div></div>', anim="slideL"))
-E.append(el(37.2, 46.6, 40, 330, plate("TRONG NHÀ & NGOÀI TRỜI", "gold"), anim="slam"))
+E.append(el(36.2, 46.6, 590, 790, '<div class="pcard green">' + img("p500", 360) + '<div class="ptag">PELI P500</div></div>', anim="slideL"))
+E.append(el(37.2, 46.6, 40, 330, plate("TRONG NHÀ & NGOÀI TRỜI", "gold"), anim="slideL"))
 E.append(el(40.1, 46.6, 40, 470, '<div class="list">' + row(40.8, "▸", "LẮP CỬA NHÔM, CỬA KÍNH")
-            + row(43.2, "▸", "TRÁM KHE TƯỜNG, KHUNG CỬA") + row(45.2, "▸", "BỀ MẶT KIM LOẠI") + '</div>', anim="slideR", w=1000))
+            + row(43.2, "▸", "TRÁM KHE TƯỜNG, KHUNG CỬA") + row(45.2, "▸", "BỀ MẶT KIM LOẠI") + '</div>', anim="slideR", w=540))
 E.append(el(46.9, 52.0, 40, 330, '<div class="cmp">'
             + R(47.4, '<div class="cl ok"><b>✔</b> AN TOÀN · ĐA NĂNG HƠN</div>')
             + R(49.4, '<div class="cl slow"><b>◷</b> KHÔ CHẬM HƠN P300 MỘT CHÚT</div>') + '</div>', anim="slideL", w=1000))
@@ -121,11 +136,11 @@ html,body{{margin:0;width:1080px;height:1920px;background:transparent;overflow:h
 .haz{{width:100%;background:repeating-linear-gradient(-45deg,{GOLD} 0 26px,#141414 26px 52px);box-shadow:0 4px 10px rgba(0,0,0,.4)}}
 .g{{background:linear-gradient(180deg,#fff3b0 0%,{GOLD} 45%,#c98a00 100%);-webkit-background-clip:text;color:transparent;
    -webkit-text-stroke:3px #1a1200;filter:drop-shadow(0 6px 0 #000)}}
-.hook{{width:1080px;background:linear-gradient(180deg,rgba(10,10,10,.88),rgba(10,10,10,.78));padding:0 0 0;text-align:center}}
-.hk1{{font-family:Oswald;font-weight:700;font-size:64px;color:#fff;letter-spacing:6px;padding-top:28px}}
-.hk2{{font-family:Oswald;font-weight:700;font-size:200px;line-height:1.02;color:#fff;letter-spacing:2px}}
+.hook{{width:1080px;background:linear-gradient(180deg,rgba(10,10,10,.82),rgba(10,10,10,.70));text-align:center}}
+.hk1{{font-family:Oswald;font-weight:700;font-size:66px;color:{GOLD};letter-spacing:4px;padding-top:22px}}
+.hk2{{font-family:Oswald;font-weight:700;font-size:180px;line-height:1.0;color:#fff;letter-spacing:2px}}
 .hk2 .vs{{font-size:110px;color:{ORANGE};vertical-align:middle;-webkit-text-stroke:0}}
-.hk3{{display:inline-block;margin:6px 0 30px;font-family:BVP;font-weight:900;font-size:46px;color:#111;background:{ORANGE};padding:10px 26px;
+.hk3{{display:inline-block;margin:6px 0 24px;font-family:BVP;font-weight:900;font-size:50px;color:#fff;background:#e0311b;padding:10px 26px;
    transform:skewX(-8deg)}}
 .sect{{display:flex;align-items:stretch;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}}
 .sn{{font-family:Oswald;font-weight:700;font-size:96px;line-height:1;color:#111;background:linear-gradient(180deg,#ffe07a,{GOLD} 50%,#d99a00);
@@ -192,14 +207,46 @@ html,body{{margin:0;width:1080px;height:1920px;background:transparent;overflow:h
 """
 
 js = """
-const CAPS=%s; const KEYS=/^(PELI|P300|P500|ACID|KÍNH|NHÔM|KHÔ|NHANH|KHÔNG|MÙI|BỀN|SẠCH|ĐÓNG|RẮN)$/i;
+const CAPS=%s, CUTS=%s, SF=%s; const KEYS=/^(PELI|P300|P500|ACID|KÍNH|NHÔM|KHÔ|NHANH|KHÔNG|MÙI|BỀN|SẠCH|ĐÓNG|RẮN)$/i;
 const els=[...document.querySelectorAll('.el')];
 const cl=x=>Math.max(0,Math.min(1,x)), ease=x=>1-Math.pow(1-x,3);
 const back=x=>{const c1=2.2,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const shotAt=t=>{let i=0;while(i<CUTS.length-2&&t>=CUTS[i+1])i++;return i};
+let PAD=[0,0];
+const hit=(x,y,w,h,fs)=>{x-=PAD[0];y-=PAD[1];w+=2*PAD[0];h+=2*PAD[1];let a=0;for(const f of fs){const ox=Math.min(x+w,f[0]+f[2])-Math.max(x,f[0]),oy=Math.min(y+h,f[1]+f[3])-Math.max(y,f[1]);if(ox>0&&oy>0)a+=ox*oy}return a};
+// tìm vị trí gần vị trí gốc nhất mà không đè mặt (ưu tiên giữ x, sau đó mới dời x)
+function place(x0,y0,w,h,fs,pref,obs){
+  obs=obs||[];
+  if(!fs.length||(!hit(x0,y0,w,h,fs)&&!hit(x0,y0,w,h,obs)))return [x0,y0];
+  let best=null,bc=1e18;
+  const xs=[x0];for(let x=20;x+w<=1060;x+=20)xs.push(x);
+  for(const x of xs)for(let y=30;y+h<=1890;y+=10){
+    const c=hit(x,y,w,h,fs)*1e6+hit(x,y,w,h,obs)*1e4+Math.abs(y-(pref??y0))+(x===x0?0:3*Math.abs(x-x0)+200);
+    if(c<bc){bc=c;best=[x,y]}}
+  return best;
+}
+const POS=new Map(), PL=[]; let CAPY=null;
+function initPos(){
+for(const e of els){
+  const x0=e.offsetLeft,y0=e.offsetTop,w=e.offsetWidth,h=e.offsetHeight,t0=+e.dataset.t0,t1=+e.dataset.t1,m=[];
+  PAD=e.dataset.a==='slam'?[w*0.18+20,h*0.18+30]:[20,30];   // lề an toàn: hiệu ứng phóng to 1.35x + dịch lên khi tắt
+  for(let i=0;i<CUTS.length-1;i++){ if(CUTS[i+1]<=Math.max(0,t0)||CUTS[i]>=t1)continue;
+    const obs=(PL[i]||[]).filter(o=>o.t0<t1&&o.t1>t0).map(o=>o.r);
+    m[i]=place(x0,y0,w,h,SF[i],null,obs); (PL[i]=PL[i]||[]).push({t0,t1,r:[m[i][0],m[i][1],w,h]}); }
+  POS.set(e,m);
+}
+PAD=[0,20];
+CAPY=CAPS.map(c=>{const i=shotAt(c[0]+0.01),fs=SF[i]||[];
+  const obs=(PL[i]||[]).filter(o=>o.t0<c[2]&&o.t1>c[0]&&o.r[3]<1500).map(o=>o.r);   // né thẻ đang hiện (trừ nền toàn màn hình)
+  if(!fs.length&&!hit(40,1560,1000,110,obs))return 1560;
+  return place(40,1560,1000,110,fs.length?fs:[[0,0,0,0]],1560,obs)[1]});
+}
 window.setT=function(t){
+  if(!CAPY) initPos();
   for(const e of els){
     const t0=+e.dataset.t0,t1=+e.dataset.t1,an=e.dataset.a;
     if(t<t0-0.01||t>t1+0.01){e.style.opacity=0;continue}
+    const ps=POS.get(e)[shotAt(t)]; if(ps){e.style.left=ps[0]+'px';e.style.top=ps[1]+'px'}
     const a=an==='none'?1:cl((t-t0)/0.28), b=cl((t1-t)/0.18);
     let tr='';
     if(an==='slam') tr=`scale(${a<1?1.35-0.35*ease(a):1})`;
@@ -215,13 +262,14 @@ window.setT=function(t){
     }
   }
   const cap=document.getElementById('cap');
-  const c=CAPS.find(c=>t>=c[0]&&t<c[2]);
+  const ci=CAPS.findIndex(c=>t>=c[0]&&t<c[2]), c=CAPS[ci];
+  if(c) cap.style.top=CAPY[ci]+'px';
   if(c&&t<93.6){const p=cl((t-c[0])/0.1);
     cap.innerHTML=c[1].split(' ').map(w=>KEYS.test(w.replace(/[,.?!]/g,''))?`<span class="k">${w}</span>`:w).join(' ');
     cap.style.opacity=p;cap.style.transform=`scale(${0.8+0.2*back(p)})`}
   else cap.style.opacity=0;
 };
-""" % json.dumps(caps, ensure_ascii=False)
+""" % (json.dumps(caps, ensure_ascii=False), json.dumps(CUTS), json.dumps(SHOT_FACES))
 
 html = f"""<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head>
 <body>{''.join(E)}<div id="cap"></div><script>{js}</script></body></html>"""

@@ -2,6 +2,16 @@
 
 > Mặc định: talking-head / b-roll + đồ hoạ scrapbook. Câu lệnh khởi tạo có thể đổi theo video mẫu của bạn.
 
+## Yêu cầu của chủ kênh (ưu tiên cao nhất)
+- **Tiêu đề hấp dẫn hiện đủ ngay từ 0s** (t0 âm, không hiệu ứng chạy chữ).
+- **3 giây đầu phải có người** trong khung hình.
+- **Cắt cảnh nhanh: đổi hành động / cảnh khoảng mỗi 3s** (2–4s), xen kẽ **zoom in** (`zoom 2`) và **zoom out** (`zoom 3`) trong `edl.txt`.
+- **Không khung hình nào để đồ hoạ / phụ đề che mặt người**: chạy `python3 pipeline/faces.py work/<slug>/base.mp4 work/<slug>/faces.json`
+  sau bước `seg`; trong `graphics.py` đặt danh sách cảnh có người thật (`PEOPLE`) và để code tự dời thẻ/phụ đề né vùng mặt
+  (xem `projects/keo/graphics.py`). Kiểm tra lại bằng `pipeline/check_faces.py` trước khi giao.
+- Video quảng cáo sản phẩm: được sắp cảnh theo nội dung lời nói (không bắt buộc theo thứ tự quay); chèn ảnh sản phẩm
+  tách nền từ chính cảnh quay (không dùng ảnh trên mạng có watermark/hotline của bên khác).
+
 ## Khung hình
 - 1080×1920, 30fps, dài đúng bằng voice.
 - **Cảnh theo thứ tự thời gian quay** (xem `creation_time` bằng ffprobe): chạy hết clip này rồi mới sang clip khác,

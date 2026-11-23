@@ -9,3 +9,4 @@
 | Ngày | Agent | Việc |
 |---|---|---|
 | 23/11/2026 | dung-video | Dựng video quảng cáo keo PELI (99,4s, 1080×1920): voice 4 đoạn, 13 cảnh, đồ hoạ cam–gold kiểu công trình, ảnh sản phẩm tách nền, phụ đề tiếng Việt |
+| 23/11/2026 | dung-video | Sửa theo góp ý: hook có người + tiêu đề từ 0s, 35 cảnh ~3s xen kẽ zoom in/out, đồ hoạ & phụ đề tự né mặt (QA 0/834 khung có người bị che) |
